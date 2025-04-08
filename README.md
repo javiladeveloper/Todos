@@ -1,5 +1,9 @@
 # ToDo List API
 
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-🚀-green)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+
 Este proyecto es una API RESTful desarrollada con FastAPI para gestionar tareas (ToDo List). Es parte de un reto técnico y está enfocada en mantener una estructura limpia, seguir buenas prácticas y usar herramientas comunes como Docker, pytest, black y flake8.
 
 ---
@@ -34,8 +38,7 @@ cd reto-tecnico-todolist
 
 ```bash
 python -m venv .venv
-
-.\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1  # En Windows
 ```
 
 ### 3. Instalar las dependencias
@@ -144,9 +147,9 @@ pytest tests/test_e2e.py
 ## Extras
 
 - El archivo `__init__.py` en `todolist/` expone solo lo esencial: `storage`, `router`, `seed_data()`.
-- Los modelos de datos para REST están separados en `schemas.py`, mientras que los de GraphQL viven en `graphql_types.py`, manteniendo las capas desacopladas.
-- Se usa `logging` para registrar eventos importantes y errores.
-- Todas las operaciones tienen validaciones automáticas gracias a `pydantic`.
+- Los modelos de datos para REST están en `schemas.py`, y los de GraphQL en `graphql_types.py`, manteniendo las capas desacopladas.
+- Se usa `logging` para registrar eventos clave como errores 404.
+- Las validaciones con Pydantic evitan que se creen tareas sin título o con descripciones demasiado largas.
 
 ---
 
@@ -190,10 +193,8 @@ mutation {
     completed
   }
 }
+```
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-🚀-green)
-![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+---
 
 Esta interfaz permite consultar y modificar tareas utilizando GraphQL como una alternativa moderna y flexible a los endpoints REST.
-
