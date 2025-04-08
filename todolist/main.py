@@ -1,7 +1,8 @@
 from fastapi import FastAPI
+from strawberry.fastapi import GraphQLRouter
+
 from todolist import router, seed_data
 from todolist.graphql import schema
-from strawberry.fastapi import GraphQLRouter
 
 app = FastAPI(title="ToDo List API")
 
