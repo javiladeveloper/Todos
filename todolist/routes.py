@@ -1,5 +1,7 @@
-from fastapi import APIRouter
 from typing import List
+
+from fastapi import APIRouter
+
 from todolist import services
 from todolist.schemas import Task, TaskCreate, TaskUpdate
 

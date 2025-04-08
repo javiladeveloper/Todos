@@ -1,7 +1,9 @@
-from todolist import services
-from todolist.schemas import TaskCreate, TaskUpdate
 import pytest
 from fastapi import HTTPException
+
+from todolist import services
+from todolist.schemas import TaskCreate, TaskUpdate
+
 
 def test_create_task_unit():
     data = TaskCreate(title="Unit Task", description="Created", completed=False)
@@ -41,6 +43,7 @@ def test_delete_task_unit():
     except Exception as e:
         assert e.status_code == 404
         assert e.detail == "Task not found"
+
 
 def test_get_task_not_found():
     with pytest.raises(HTTPException) as exc_info:

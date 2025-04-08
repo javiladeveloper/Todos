@@ -1,5 +1,7 @@
-import strawberry
 from typing import List, Optional
+
+import strawberry
+
 from todolist import services
 
 
@@ -23,14 +25,20 @@ class Query:
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def create_task(self, title: str, description: str = "", completed: bool = False) -> TaskType:
+    def create_task(
+        self, title: str, description: str = "", completed: bool = False
+    ) -> TaskType:
         from todolist.schemas import TaskCreate
+
         data = TaskCreate(title=title, description=description, completed=completed)
         return services.create_task(data)
 
     @strawberry.mutation
-    def update_task(self, id: int, title: str, description: str = "", completed: bool = False) -> TaskType:
+    def update_task(
+        self, id: int, title: str, description: str = "", completed: bool = False
+    ) -> TaskType:
         from todolist.schemas import TaskUpdate
+
         data = TaskUpdate(title=title, description=description, completed=completed)
         return services.update_task(id, data)
 

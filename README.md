@@ -8,6 +8,7 @@ Este proyecto es una API RESTful desarrollada con FastAPI para gestionar tareas 
 
 ---
 
+
 ## Descripción del proyecto
 
 La API permite crear, consultar, actualizar y eliminar tareas simples. Cada tarea contiene un título, una descripción opcional, un estado de completado y un ID único.
