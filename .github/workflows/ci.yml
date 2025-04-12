@@ -20,16 +20,19 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: "3.10"
 
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -r requirements-dev.txt || true
+          pip install bandit pre-commit
 
+      - name: Run pre-commit hooks
+        run: |
+          source .venv/bin/activate
+          pre-commit run --all-files
       - name: Validar formato con Black
         run: |
           source .venv/bin/activate
