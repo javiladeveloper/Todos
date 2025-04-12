@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 
-from app.config import settings
+from app.config import get_settings
 from app.docs.openapi_tags import openapi_tags_by_lang
 
 
 def custom_openapi(app: FastAPI):
+    settings = get_settings()
     if app.openapi_schema:
         return app.openapi_schema
 

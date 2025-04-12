@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.v1.routes import router as v1_router
-from app.config import settings
+from app.config import get_settings
 from app.core.exceptions import ErrorLoggingMiddleware, add_exception_handlers
 from app.core.logger import init_logging
 from app.core.openapi import custom_openapi
@@ -13,6 +13,7 @@ from app.infrastructure.seeds import seed_data
 
 def create_app() -> FastAPI:
     init_logging()
+    settings = get_settings()
 
     seed_data(repo_instance)
 
