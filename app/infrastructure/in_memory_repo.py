@@ -1,9 +1,10 @@
 from typing import List, Optional
 
-from todolist.schemas import Task
+from app.domain.entities import Task
+from app.infrastructure.interfaces import TaskRepository
 
 
-class TaskStorage:
+class InMemoryTaskRepo(TaskRepository):
     def __init__(self):
         self.tasks: List[Task] = []
         self.counter = 1
@@ -12,20 +13,20 @@ class TaskStorage:
         return self.tasks
 
     def get(self, task_id: int) -> Optional[Task]:
-        return next((task for task in self.tasks if task.id == task_id), None)
+        return next((t for t in self.tasks if t.id == task_id), None)
 
-    def create(self, task_data: dict) -> Task:
-        task = Task(id=self.counter, **task_data)
+    def create(self, data: dict) -> Task:
+        task = Task(id=self.counter, **data)
         self.tasks.append(task)
         self.counter += 1
         return task
 
-    def update(self, task_id: int, task_data: dict) -> Optional[Task]:
+    def update(self, task_id: int, data: dict) -> Optional[Task]:
         task = self.get(task_id)
         if task:
-            task.title = task_data["title"]
-            task.description = task_data.get("description", "")
-            task.completed = task_data["completed"]
+            task.title = data["title"]
+            task.description = data.get("description", "")
+            task.completed = data["completed"]
             return task
         return None
 
@@ -35,6 +36,3 @@ class TaskStorage:
             self.tasks.remove(task)
             return True
         return False
-
-
-storage = TaskStorage()

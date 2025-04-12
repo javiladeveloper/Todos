@@ -3,17 +3,18 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-🚀-green)
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
+![CI](https://github.com/USER/REPO/actions/workflows/ci.yml/badge.svg)
 
-Este proyecto es una API RESTful desarrollada con FastAPI para gestionar tareas (ToDo List). Es parte de un reto técnico y está enfocada en mantener una estructura limpia, seguir buenas prácticas y usar herramientas comunes como Docker, pytest, black y flake8.
+Este proyecto es una API RESTful y GraphQL construida con FastAPI para gestionar tareas (ToDo List). Fue desarrollado como parte de un reto técnico con enfoque profesional, aplicando Clean Architecture, principios SOLID, validaciones robustas, logging estructurado, paginación, entorno multilenguaje y control por entorno.
 
 ---
 
+## 🧩 Descripción del proyecto
 
-## Descripción del proyecto
+Permite crear, listar, actualizar y eliminar tareas. Cada tarea incluye un título, una descripción opcional, un estado de completado y un identificador único.
 
-La API permite crear, consultar, actualizar y eliminar tareas simples. Cada tarea contiene un título, una descripción opcional, un estado de completado y un ID único.
-
-### Formato de una tarea
+### 📦 Ejemplo de tarea
 
 ```json
 {
@@ -22,6 +23,7 @@ La API permite crear, consultar, actualizar y eliminar tareas simples. Cada tare
   "description": "Leer la documentación oficial",
   "completed": false
 }
+
 ```
 
 ---
@@ -31,8 +33,8 @@ La API permite crear, consultar, actualizar y eliminar tareas simples. Cada tare
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <REPO_URL>
-cd reto-tecnico-todolist
+git clone https://github.com/javiladeveloper/Todos.git
+cd Todos 
 ```
 
 ### 2. Crear y activar un entorno virtual
@@ -47,8 +49,27 @@ python -m venv .venv
 ```bash
 pip install -r requirements.txt
 ```
+### 4. Configurar variables de entorno
+Crea un archivo .env con:
+```ini
+ENV=dev
+```
+Y uno adicional .env.dev con:
+```ini
+LOG_LEVEL=DEBUG
+LANG=es
+API_VERSION_PATH=v1
+ENABLE_GRAPHQL=true
+API_TITLE=ToDo API
+API_VERSION=1.0.0
+API_DESCRIPTION=API RESTful y GraphQL para gestionar tareas.
+API_CONTACT_NAME=Javila Developer
+API_CONTACT_URL=https://github.com/javiladeveloper
+API_CONTACT_EMAIL=jonathan.joan.avila@gmail.comexample.com
 
-### 4. Levantar la app
+```
+
+### 5. Levantar la app
 
 ```bash
 uvicorn todolist.main:app --reload
@@ -108,12 +129,13 @@ pytest tests/test_e2e.py
 - Uvicorn
 - Pydantic
 - Pytest
-- Black
-- Flake8
+- Black & Flake8
 - Docker
+- Pre-commit
 - httpx (para pruebas E2E)
 - Strawberry (para GraphQL)
 - logging (para trazabilidad)
+- Soporte multiidioma (LANG=es|en)
 
 ---
 
@@ -121,25 +143,43 @@ pytest tests/test_e2e.py
 
 ```
 .
-├── todolist/
-│   ├── __init__.py          # expone solo lo necesario (router, storage, seed_data)
-│   ├── main.py              # inicializa FastAPI + rutas
-│   ├── routes.py            # define endpoints REST
-│   ├── schemas.py           # modelos Pydantic para la API REST
-│   ├── services.py          # lógica de negocio
-│   ├── storage.py           # almacenamiento en memoria
-│   ├── seed.py              # tareas dummy iniciales
-│   ├── graphql.py           # esquema unificado (schema) para GraphQL
-│   └── graphql_types.py     # tipos y resolvers GraphQL (Strawberry)
+.
+├── app/
+│   ├── api/
+│   │   └── v1/
+│   │       ├── routes/
+│   │       │   ├── task_routes.py
+│   │       │   └── system_routes.py
+│   │       └── dependencies.py
+│   ├── config.py
+│   ├── core/
+│   │   ├── exceptions.py
+│   │   ├── logger.py
+│   │   └── openapi.py
+│   ├── domain/
+│   │   ├── entities.py
+│   │   └── schemas.py
+│   ├── docs/
+│   │   └── openapi_tags.py
+│   ├── graphql/
+│   │   ├── resolvers.py
+│   │   ├── schema.py
+│   │   └── types.py
+│   ├── infrastructure/
+│   │   ├── interfaces.py
+│   │   ├── in_memory_repo.py
+│   │   ├── repo_instance.py
+│   │   └── seeds.py
+│   ├── services/
+│   │   └── task_service.py
+│   └── main.py
 ├── tests/
-│   ├── __init__.py
-│   ├── test_services.py     # pruebas unitarias
-│   └── test_e2e.py          # pruebas end-to-end
-├── Dockerfile
+│   ├── unit/
+│   └── e2e/
 ├── docker-compose.yml
+├── Dockerfile
 ├── requirements.txt
-├── .flake8
-├── pytest.ini
+├── .env / .env.dev / .env.prod
 └── README.md
 ```
 
@@ -147,10 +187,11 @@ pytest tests/test_e2e.py
 
 ## Extras
 
-- El archivo `__init__.py` en `todolist/` expone solo lo esencial: `storage`, `router`, `seed_data()`.
-- Los modelos de datos para REST están en `schemas.py`, y los de GraphQL en `graphql_types.py`, manteniendo las capas desacopladas.
-- Se usa `logging` para registrar eventos clave como errores 404.
-- Las validaciones con Pydantic evitan que se creen tareas sin título o con descripciones demasiado largas.
+- Middleware de logging para errores no controlados.
+- Control total de errores con ExceptionHandlers personalizados.
+- Validaciones con Pydantic (validator, root_validator).
+- Paginación y manejo de límites.
+- Soporte multilenguaje en documentación OpenAPI.
 
 ---
 
@@ -199,3 +240,4 @@ mutation {
 ---
 
 Esta interfaz permite consultar y modificar tareas utilizando GraphQL como una alternativa moderna y flexible a los endpoints REST.
+
