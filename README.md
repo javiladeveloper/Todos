@@ -88,8 +88,8 @@ Podés acceder a la documentación interactiva en:
 ### Opción 1: build + run
 
 ```bash
-docker build -t todo-api .
-docker run -p 8000:8000 todo-api
+docker build -t todos-app .
+docker run -e ENV=dev -p 8000:8000 todos-app
 ```
 
 ### Opción 2: usando docker-compose
