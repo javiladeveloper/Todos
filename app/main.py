@@ -27,7 +27,8 @@ def create_app() -> FastAPI:
             "email": settings.api_contact_email,
         },
         docs_url="/docs" if settings.env == "dev" else None,
-        redoc_url=None,
+        redoc_url="/redoc" if settings.env == "dev" else None,
+        openapi_url="/openapi.json",
     )
 
     add_exception_handlers(app)
