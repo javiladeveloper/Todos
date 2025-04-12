@@ -4,7 +4,8 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-🚀-green)
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
-[![CI](https://github.com/coderio/crehana-todo-api/actions/workflows/ci.yml/badge.svg)](https://github.com/coderio/crehana-todo-api/actions/workflows/ci.yml)
+[![CI](https://github.com/javiladeveloper/Todos/actions/workflows/ci.yml/badge.svg)](https://github.com/javiladeveloper/Todos/actions/workflows/ci.yml)
+
 
 Este proyecto es una API RESTful y GraphQL construida con FastAPI para gestionar tareas (ToDo List). Fue desarrollado como parte de un reto técnico con enfoque profesional, aplicando Clean Architecture, principios SOLID, validaciones robustas, logging estructurado, paginación, entorno multilenguaje y control por entorno.
 
