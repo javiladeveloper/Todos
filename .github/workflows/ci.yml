@@ -47,7 +47,9 @@ jobs:
         run: |
           source .venv/bin/activate
           bandit -r app -x tests
-
+      - name: Copiar archivo de entorno
+        run: cp .env.dev .env
+        
       - name: Correr pruebas
         run: |
           source .venv/bin/activate
