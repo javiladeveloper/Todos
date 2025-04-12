@@ -1,5 +1,6 @@
 import pytest
 
+from app.config import Settings
 from app.core.exceptions import TaskNotFoundError
 from app.infrastructure.in_memory_repo import InMemoryTaskRepo
 from app.services.task_service import TaskService
@@ -9,6 +10,24 @@ from app.services.task_service import TaskService
 def service():
     repo = InMemoryTaskRepo()
     return TaskService(repo)
+
+
+@pytest.fixture(autouse=True)
+def mock_settings(monkeypatch):
+    def fake_settings():
+        return Settings(
+            log_level="WARNING",
+            enable_graphql=False,
+            lang="en",
+            api_title="Mock API",
+            api_version="9.9.9",
+            api_description="Mocked API settings for test purposes.",
+            api_contact_name="Mock Dev",
+            api_contact_url="https://mocked.dev",
+            api_contact_email="mock@dev.io",
+        )
+
+    monkeypatch.setattr("app.config.get_settings", fake_settings)
 
 
 def test_create_task(service):
