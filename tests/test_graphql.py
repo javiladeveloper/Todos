@@ -1,28 +1,8 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from app.config import Settings
 from app.main import app
 
 client = TestClient(app)
-
-
-@pytest.fixture(autouse=True)
-def mock_settings(monkeypatch):
-    def fake_settings():
-        return Settings(
-            log_level="WARNING",
-            enable_graphql=True,
-            lang="en",
-            api_title="GraphQL Mock API",
-            api_version="9.9.9",
-            api_description="GraphQL testing",
-            api_contact_name="GraphQL Tester",
-            api_contact_url="https://graphql.test",
-            api_contact_email="graphql@test.io",
-        )
-
-    monkeypatch.setattr("app.config.get_settings", fake_settings)
 
 
 def graphql_query(query: str):

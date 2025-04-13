@@ -1,13 +1,14 @@
 from typing import Optional
 
 import strawberry
+from strawberry.exceptions import GraphQLError
 
-from app.core.exceptions import InvalidTaskData
+from app.core.exceptions import InvalidTaskData, TaskNotFoundError
 from app.graphql.types import PaginatedTaskType, TaskInput, TaskType, TaskUpdateInput
-from app.infrastructure.repo_instance import repo_instance
+from app.infrastructure.repo_instance import get_repository
 from app.services.task_service import TaskService
 
-service = TaskService(repo_instance)
+service = TaskService(get_repository())
 
 
 @strawberry.type
@@ -35,8 +36,8 @@ class Query:
         try:
             task = service.get_task(id)
             return TaskType(**task.__dict__)
-        except Exception:
-            return None
+        except TaskNotFoundError as e:
+            raise GraphQLError(str(e))
 
 
 @strawberry.type
@@ -53,14 +54,22 @@ class Mutation:
 
     @strawberry.mutation
     def update_task(self, id: int, input: TaskUpdateInput) -> TaskType:
-        if not input.title.strip():
-            raise InvalidTaskData("El título no puede estar vacío.")
-        if input.completed and not input.description.strip():
-            raise InvalidTaskData("Las tareas completadas deben tener una descripción.")
+        try:
+            if not input.title.strip():
+                raise InvalidTaskData("El título no puede estar vacío.")
+            if input.completed and not input.description.strip():
+                raise InvalidTaskData(
+                    "Las tareas completadas deben tener una descripción."
+                )
 
-        updated = service.update_task(id, input.__dict__)
-        return TaskType(**updated.__dict__)
+            updated = service.update_task(id, input.__dict__)
+            return TaskType(**updated.__dict__)
+        except TaskNotFoundError as e:
+            raise GraphQLError(str(e))
 
     @strawberry.mutation
     def delete_task(self, id: int) -> bool:
-        return service.delete_task(id)
+        try:
+            return service.delete_task(id)
+        except TaskNotFoundError as e:
+            raise GraphQLError(str(e))

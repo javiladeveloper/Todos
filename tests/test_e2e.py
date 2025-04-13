@@ -1,28 +1,8 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from app.config import Settings
 from app.main import app
 
 client = TestClient(app)
-
-
-@pytest.fixture(autouse=True)
-def mock_settings(monkeypatch):
-    def fake_settings():
-        return Settings(
-            log_level="INFO",
-            enable_graphql=False,
-            lang="en",
-            api_title="E2E Mock API",
-            api_version="2.0.0",
-            api_description="Mocked E2E testing",
-            api_contact_name="E2E Tester",
-            api_contact_url="https://e2e.test",
-            api_contact_email="tester@e2e.test",
-        )
-
-    monkeypatch.setattr("app.config.get_settings", fake_settings)
 
 
 def test_create_task():

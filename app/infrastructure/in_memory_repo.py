@@ -1,38 +1,41 @@
-from typing import List, Optional
+from typing import List
 
+from app.core.exceptions import TaskNotFoundError
 from app.domain.entities import Task
-from app.infrastructure.interfaces import TaskRepository
+from app.infrastructure.interfaces import AbstractTaskRepository
 
 
-class InMemoryTaskRepo(TaskRepository):
+class InMemoryTaskRepository(AbstractTaskRepository):
     def __init__(self):
         self.tasks: List[Task] = []
         self.counter = 1
 
-    def get_all(self) -> List[Task]:
+    def list_tasks(self) -> List[Task]:
         return self.tasks
 
-    def get(self, task_id: int) -> Optional[Task]:
-        return next((t for t in self.tasks if t.id == task_id), None)
+    def get_task(self, task_id: int) -> Task:
+        task = next((t for t in self.tasks if t.id == task_id), None)
+        if not task:
+            raise TaskNotFoundError(f"Task with ID {task_id} not found")
+        return task
 
-    def create(self, data: dict) -> Task:
-        task = Task(id=self.counter, **data)
+    def create_task(self, task: Task) -> Task:
+        task.id = self.counter
         self.tasks.append(task)
         self.counter += 1
         return task
 
-    def update(self, task_id: int, data: dict) -> Optional[Task]:
-        task = self.get(task_id)
-        if task:
-            task.title = data["title"]
-            task.description = data.get("description", "")
-            task.completed = data["completed"]
-            return task
-        return None
+    def update_task(self, task_id: int, updated_task: Task) -> Task:
+        task = self.get_task(task_id)
+        task.title = updated_task.title
+        task.description = updated_task.description
+        task.completed = updated_task.completed
+        return task
 
-    def delete(self, task_id: int) -> bool:
-        task = self.get(task_id)
-        if task:
+    def delete_task(self, task_id: int) -> bool:
+        try:
+            task = self.get_task(task_id)
             self.tasks.remove(task)
             return True
-        return False
+        except TaskNotFoundError:
+            return False

@@ -7,16 +7,15 @@ from app.core.logger import init_logging
 from app.core.openapi import custom_openapi
 from app.core.performance import PerformanceMiddleware
 from app.graphql.schema import graphql_app
-from app.infrastructure.repo_instance import repo_instance
+from app.infrastructure.repo_instance import get_repository
 from app.infrastructure.seeds import seed_data
 
 
 def create_app() -> FastAPI:
     init_logging()
     settings = get_settings()
-
-    seed_data(repo_instance)
-
+    repo = get_repository()
+    seed_data(repo)
     app = FastAPI(
         title=settings.api_title,
         version=settings.api_version,
