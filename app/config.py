@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     api_contact_name: str
     api_contact_url: str
     api_contact_email: str
+    repo_type: str = os.getenv("REPO_TYPE", "memory")
 
     class Config:
         env_file = dotenv_path
@@ -47,5 +48,6 @@ def get_settings():
             api_contact_name="Test User",
             api_contact_url="http://localhost",
             api_contact_email="test@example.com",
+            repo_type="memory",
         )
     return Settings()

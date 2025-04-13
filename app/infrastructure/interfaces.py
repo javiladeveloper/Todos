@@ -1,21 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List
 
 from app.domain.entities import Task
 
 
-class TaskRepository(ABC):
+class AbstractTaskRepository(ABC):
     @abstractmethod
-    def get_all(self) -> List[Task]: ...
+    def list_tasks(self) -> List[Task]:
+        pass
 
     @abstractmethod
-    def get(self, task_id: int) -> Optional[Task]: ...
+    def get_task(self, task_id: int) -> Task:
+        pass
 
     @abstractmethod
-    def create(self, data: dict) -> Task: ...
+    def create_task(self, task: Task) -> Task:
+        pass
 
     @abstractmethod
-    def update(self, task_id: int, data: dict) -> Optional[Task]: ...
+    def update_task(self, task_id: int, task: Task) -> Task:
+        pass
 
     @abstractmethod
-    def delete(self, task_id: int) -> bool: ...
+    def delete_task(self, task_id: int) -> None:
+        pass
