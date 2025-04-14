@@ -22,14 +22,14 @@ class Settings(BaseSettings):
     api_version_path: str = "v1"
     log_level: str
     enable_graphql: bool
-    lang: str = os.getenv("LANG", "es")
+    lang: str = "es"
     api_title: str
     api_version: str
     api_description: str
     api_contact_name: str
     api_contact_url: str
     api_contact_email: str
-    repo_type: str = os.getenv("REPO_TYPE", "memory")
+    repo_type: str = "memory"
 
     class Config:
         env_file = dotenv_path
